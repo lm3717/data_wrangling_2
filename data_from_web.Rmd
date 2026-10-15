@@ -31,7 +31,7 @@ table_marj
 ```
 
 ### Cost of Living
-
+use read_html_live for websites that change 
 ```{r}
 cost_df = 
   read_html_live(
@@ -43,6 +43,7 @@ cost_df =
 ???? Office Hours??
 
 ### Star wars
+to pull elements out, reight click and inspect the page to find what you want
 ```{r}
 swm_html = 
   read_html_live("https://www.imdb.com/list/ls070150896/")
@@ -97,5 +98,48 @@ books = tibble(
   price = books_price
 )
 ```
+
+#### Water consumption
+GET is used for APIs rather than websites
+```{r}
+nyc_water = 
+  GET("https://data.cityofnewyork.us/api/v3/views/ia2d-e54m/query.csv") |> 
+  content("parsed")
+
+# OR We can also import this dataset as a JSON file. This takes a bit more work (and this is, really, a pretty easy case), but it’s still doable.
+
+nyc_water = 
+  GET("https://data.cityofnewyork.us/api/v3/views/ia2d-e54m/query.json") |> 
+  content("text") |>
+  jsonlite::fromJSON() |>
+  as_tibble()
+```
+
+**********
+| Function           | Purpose                        | Example |
+| `read_html()`      | Read HTML from a webpage       | Books to Scrape |
+| `read_html_live()` | Load a webpage using a browser | IMDb |
+| `GET()`            | HTTP request from an API       | NYC water consumption |
+
+#### Websites with Tokens
+```{r}
+brfss_smart2010 = 
+  GET("https://chronicdata.cdc.gov/api/v3/views/acme-vg9e/query.csv",
+      query = list("app_token" = "eJjLESjSLK9uMWPnOCcbTIZoD")) |> 
+  content("parsed")
+```
+
+#### More comlicated APIs 
+```{r}
+pokemon = 
+  GET("http://pokeapi.co/api/v2/pokemon/1") |>
+  content()
+
+pokemon[["name"]]
+pokemon[["height"]]
+pokemon[["abilities"]]
+```
+
+
 
 
