@@ -9,6 +9,14 @@ output: html_document
 library(tidyverse)
 library(rvest)
 library(p8105.datasets)
+
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
 ```
 
 ```{r}
@@ -140,5 +148,66 @@ nyc_airbnb |>
   coord_flip()
 ```
 
+## restaurant inspections
 
+```{r}
+data("rest_inspect")
+
+rest_inspec =
+  rest_inspec |> 
+  rename(borough = boro)
+```
+
+Quick EDA
+```{r}
+rest_inspec |> 
+  count(borough, grade) |> 
+  pivot_wider(
+    names_from = grade, 
+    values_from = n)
+```
+
+```{r}
+rest_inspec =
+  rest_inspec |>
+  filter(borough != "0", 
+         grade %in% c ("A", "B", "C"))
+  rest_inspec |> 
+  count(borough, grade) |> 
+  pivot_wider(
+    names_from = grade, 
+    values_from = n)
+```
+
+
+FIND PIZZA
+```{r}
+rest_inspec |>
+  filter(str_detect(dba, "[Pp][Ii][Zz][Zz][Aa]")) |> 
+  count(borough, grade) |> 
+  summarize(n = n()) |> 
+  pivot_wider(
+    names_from = grade, 
+    values_from = n)
+```
+
+this is better
+```{r}
+rest_inspec |>
+  mutate(dba = str_to_upper(dba)) |> 
+  filter(str_detect(dba, "PIZZA")) |> 
+  count(borough, grade) |> 
+  summarize(n = n()) |> 
+  pivot_wider(
+    names_from = grade, 
+    values_from = n)
+```
+
+```{r}
+rest_inspec |>
+  mutate(borough = fct_infreq(borough)) |> 
+  filter(str_detect(dba, "[Pp][Ii][Zz][Zz][Aa]")) |> 
+  ggplot(aes(x = borough, fill = grade)) +
+  geom_bar()
+```
 
