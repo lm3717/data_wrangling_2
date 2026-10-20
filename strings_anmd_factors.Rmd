@@ -1,0 +1,97 @@
+---
+title: "Strings and Factors"
+author: "Lina Marcinczyk"
+date: "2026-10-15"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(rvest)
+library(p8105.datasets)
+```
+
+```{r}
+string_vec = c("my", "name", "is", "lina")
+
+str_detect(string_vec, "lina")
+
+str_replace(string_vec, "my", "My")
+```
+
+```{r}
+string_vec = c(
+  "i think we all rule for participating",
+  "i think i have been caught",
+  "i think this will be quite fun actually",
+  "it will be fun, i think"
+  )
+
+str_detect(string_vec, "^i think")
+```
+^ indicates the beginning of the line
+$ indicates the end of the sentence
+
+```{r}
+string_vec = c(
+  "Time for a Pumpkin Spice Latte!",
+  "went to the #pumpkinpatch last weekend",
+  "Pumpkin Pie is obviously the best pie",
+  "SMASHING PUMPKINS -- LIVE IN CONCERT!!"
+  )
+
+str_detect(string_vec,"[Pp]umpkin")
+```
+[] either caps
+
+```{r}
+string_vec = c(
+  '7th inning stretch',
+  '1st half soon to begin. Texas won the toss.',
+  'she is 5 feet 4 inches tall',
+  '3AM - cant sleep :('
+  )
+
+str_detect(string_vec, "^[0-9][a-zA-Z]")
+## finds a digit followed by a letter at the beginning of the phrase
+```
+
+```{r}
+string_vec = c(
+  'Its 7:11 in the evening',
+  'want to go to 7-11?',
+  'my flight is AA711',
+  'NetBios: scanning ip 203.167.114.66'
+  )
+
+str_detect(string_vec, "7.11")
+```
+X.XX dot matches anything
+
+```{r}
+string_vec = c(
+  'The CI is [2, 5]',
+  ':-]',
+  ':-[',
+  'I found the answer on pages [6-7]'
+  )
+
+str_detect(string_vec, "\\[")
+```
+brackets are used to define ranges, \\ indicates you want that actual character
+
+## factors
+
+```{r}
+vec_sex = factor(c("male", "male", "female", "female"))
+
+as.numeric(vec_sex)
+
+vec_sex = fct_relevel(vec_sex, "male")
+```
+fct_revel tells it to switch the levels in reverse
+
+
+
+
+
